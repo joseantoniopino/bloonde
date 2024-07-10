@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ActiveUserScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
@@ -34,6 +37,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Return active users by default
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new ActiveUserScope());
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -41,7 +52,6 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -49,5 +59,18 @@ class User extends Authenticatable
     public function customer(): HasOne
     {
         return $this->hasOne(Customer::class);
+    }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class);
+    }
+
+    /**
+     * Get all users including inactive ones
+     */
+    public static function withInactive(Builder $query): Builder
+    {
+        return $query->withoutGlobalScope(ActiveUserScope::class);
     }
 }
