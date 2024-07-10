@@ -73,4 +73,19 @@ class User extends Authenticatable
     {
         return $query->withoutGlobalScope(ActiveUserScope::class);
     }
+
+    public function profile(): BelongsTo
+    {
+        return $this->belongsTo(Profile::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->profile && $this->profile->id == Profile::ADMIN;
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->profile && $this->profile->id == Profile::CUSTOMER;
+    }
 }

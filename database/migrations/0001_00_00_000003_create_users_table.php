@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Profile;
 use App\Models\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -21,8 +22,14 @@ return new class extends Migration
                 ->constrained()
                 ->nullOnDelete();
 
+            $table->foreignIdFor(Profile::class)
+                ->nullable()
+                ->default(Profile::CUSTOMER)
+                ->constrained()
+                ->nullOnDelete();
+
             $table->string('password');
-            $table->unsignedBigInteger('profile_id')->nullable();
+
             $table->timestamps();
         });
 
