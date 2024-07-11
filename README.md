@@ -1,3 +1,4 @@
+
 # Proyecto Laravel: Gestión de Clientes y Hobbies
 
 Este proyecto Laravel proporciona una API para gestionar clientes y sus hobbies, con funcionalidades de autenticación y generación de PDFs usando DomPDF.
@@ -34,6 +35,14 @@ Este proyecto Laravel proporciona una API para gestionar clientes y sus hobbies,
     docker-compose run --rm bloonde composer install
     ```
 
+> Nota: el proyecto usa laravel sail, una vez tengas instaladas las dependencias, puedes usar `sail` en lugar  de `docker-compose run --rm bloonde` para ejecutar los comandos.
+> 
+> Se puede crear un alias para sail en el archivo `.bashrc` o `.zshrc`: 
+> ``` alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)' ```  
+> 
+> Mas información sobre sail en  [https://laravel.com/docs/11.x/sail](https://laravel.com/docs/11.x/sail)
+> Por ejemplo, **el siguiente comando podría ser** ```sail artisan key:generate```
+
 6. **Generar la Clave de la Aplicación**
     ```
     docker-compose run --rm bloonde php artisan key:generate
@@ -43,13 +52,14 @@ Este proyecto Laravel proporciona una API para gestionar clientes y sus hobbies,
     ```
     docker-compose run --rm bloonde php artisan migrate --seed
     ```
-Nota: el proyecto usa laravel sail, una vez tengas instaladas las dependencias, puedes usar `sail` en lugar de `docker-compose run --rm bloonde` para ejecutar los comandos.
 
-Se puede crear un alias para sail en el archivo `.bashrc` o `.zshrc`:
-```
-alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
-```
-Mas información sobre sail en [https://laravel.com/docs/11.x/sail](https://laravel.com/docs/11.x/sail)
+8. (optativo) **Forzar cachés de docker con laravel sail**
+- *Podría darse el caso de que el servicio arrancase pero por temas de caché de docker no funcionase la url para ello ejecuta los siguientes comandos*
+    ```
+    sail up -d
+    sail down
+    sail up -d
+    ```
 
 ## Uso de la API
 **Token de Acceso**: Se debe incluir el token de acceso en el encabezado `Authorization` para realizar acciones protegidas. El token es tipo Bearer, el cual se obtiene al hacer login y se destruye al hacer logout
