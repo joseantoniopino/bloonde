@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             HobbySeeder::class,
             CustomerSeeder::class,
-            CustomerHobbySeeder::class,
         ]);
     }
 }
