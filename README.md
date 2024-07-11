@@ -43,6 +43,13 @@ Este proyecto Laravel proporciona una API para gestionar clientes y sus hobbies,
     ```
     docker-compose run --rm bloonde php artisan migrate --seed
     ```
+Nota: el proyecto usa laravel sail, una vez tengas instaladas las dependencias, puedes usar `sail` en lugar de `docker-compose run --rm bloonde` para ejecutar los comandos.
+
+Se puede crear un alias para sail en el archivo `.bashrc` o `.zshrc`:
+```
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+```
+Mas información sobre sail en [https://laravel.com/docs/11.x/sail](https://laravel.com/docs/11.x/sail)
 
 ## Uso de la API
 **Token de Acceso**: Se debe incluir el token de acceso en el encabezado `Authorization` para realizar acciones protegidas. El token es tipo Bearer, el cual se obtiene al hacer login y se destruye al hacer logout
