@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas públicas
@@ -15,6 +16,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('customers', [CustomerController::class, 'index']);
         Route::post('customers', [CustomerController::class, 'store']);
         Route::get('customers-by-hobby', [CustomerController::class, 'getCustomersByHobby']);
+        Route::get('customers/pdf', PdfController::class);
     });
 
     // Rutas accesibles para administradores y clientes para sus propios datos
