@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetCustomersByHobbyRequest;
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
+// TODO: Implement resources and custom json responses
 class CustomerController extends Controller
 {
     public function index()
@@ -12,7 +16,7 @@ class CustomerController extends Controller
         return Customer::with('hobbies')->get();
     }
 
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request): JsonResponse
     {
         $customer = Customer::create($request->only(['name', 'surname', 'user_id']));
 
@@ -23,12 +27,12 @@ class CustomerController extends Controller
         return response()->json($customer->load('hobbies'), 201);
     }
 
-    public function show(Customer $customer)
+    public function show(Customer $customer): JsonResponse
     {
         return response()->json($customer->load('hobbies'));
     }
 
-    public function update(Request $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer): JsonResponse
     {
         $customer->update($request->only(['name', 'surname']));
 
@@ -39,19 +43,20 @@ class CustomerController extends Controller
         return response()->json($customer->load('hobbies'));
     }
 
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer): JsonResponse
     {
         $customer->delete();
 
         return response()->json(null, 204);
     }
 
-    public function getCustomersByHobby($hobby_id)
+    public function getCustomersByHobby(GetCustomersByHobbyRequest $request): JsonResponse
     {
-        $customers = Customer::whereHas('hobbies', function($query) use ($hobby_id) {
-            $query->where('hobby_id', $hobby_id);
-        })->get();
+        $hobbyId = $request->hobby_id;
+        $customerNames = Customer::withWhereHas('hobbies', function($query) use ($hobbyId) {
+            $query->where('hobby_id', $hobbyId);
+        })->pluck('name');
 
-        return response()->json($customers);
+        return response()->json($customerNames);
     }
 }

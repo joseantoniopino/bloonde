@@ -11,22 +11,22 @@ Route::post('login', [AuthController::class, 'login']);
 // Rutas protegidas por autenticación
 Route::middleware(['auth:sanctum'])->group(function () {
     // Rutas accesibles solo para administradores
-    Route::middleware(['role:admin'])->group(function () {
+    Route::middleware(['can:viewAny,App\Models\Customer'])->group(function () {
         Route::get('customers', [CustomerController::class, 'index']);
         Route::post('customers', [CustomerController::class, 'store']);
-        Route::get('hobby/{id}/customers', [CustomerController::class, 'getCustomersByHobby']);
+        Route::get('customers-by-hobby', [CustomerController::class, 'getCustomersByHobby']);
     });
 
     // Rutas accesibles para administradores y clientes para sus propios datos
-    Route::middleware(['role:admin,view'])->group(function () {
+    Route::middleware(['can:view,customer'])->group(function () {
         Route::get('customers/{customer}', [CustomerController::class, 'show']);
     });
 
-    Route::middleware(['role:admin,update'])->group(function () {
+    Route::middleware(['can:update,customer'])->group(function () {
         Route::put('customers/{customer}', [CustomerController::class, 'update']);
     });
 
-    Route::middleware(['role:admin,delete'])->group(function () {
+    Route::middleware(['can:delete,customer'])->group(function () {
         Route::delete('customers/{customer}', [CustomerController::class, 'destroy']);
     });
 
